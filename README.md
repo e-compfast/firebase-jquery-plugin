@@ -1,0 +1,2 @@
+firebase-jquery-plugin
+======================
