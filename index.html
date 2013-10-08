@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Firebase-jquery-plugin by ebeeson</title>
+    <title>firebase-jquery-plugin by ebeeson</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -31,15 +31,89 @@
 
       <section>
         <div id="title">
-          <h1>Firebase-jquery-plugin</h1>
-          <p></p>
+          <h1>firebase-jquery-plugin</h1>
+          <p>jQuery plugin for mapping the DOM to Firebase</p>
           <hr>
           <span class="credits left">Project maintained by <a href="https://github.com/ebeeson">ebeeson</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
         </div>
 
-        <h1>
-<a name="firebase-jquery-plugin" class="anchor" href="#firebase-jquery-plugin"><span class="octicon octicon-link"></span></a>firebase-jquery-plugin</h1>
+        <p>A jQuery plugin that constructs <a href="https://www.firebase.com/docs/javascript/firebase/new-firebase.html">Firebase references</a> based on hierarchical <code>data-firebase</code> DOM attributes.</p>
+
+<h2>
+<a name="basic-example" class="anchor" href="#basic-example"><span class="octicon octicon-link"></span></a>Basic Example</h2>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"#example1"</span> <span class="na">data-firebase=</span><span class="s">"https://firebase-jquery-plugin.firebaseio.com/"</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">firebase</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'#example1'</span><span class="p">).</span><span class="nx">firebase</span><span class="p">();</span>
+<span class="c1">// same as:</span>
+<span class="c1">// firebase = new Firebase("https://firebase-jquery-plugin.firebaseio.com/");</span>
+</pre></div>
+
+<h2>
+<a name="hierarchy-example" class="anchor" href="#hierarchy-example"><span class="octicon octicon-link"></span></a>Hierarchy Example</h2>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;body</span> <span class="na">data-firebase=</span><span class="s">"https://firebase-jquery-plugin.firebaseio.com/"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">data-firebase=</span><span class="s">"test"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">data-firebase=</span><span class="s">"data"</span><span class="nt">&gt;</span>Click Me<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'button'</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">firebase</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">firebase</span><span class="p">();</span> <span class="c1">// new Firebase("https://firebase-jquery-plugin.firebaseio.com/test/data");</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="shorthands" class="anchor" href="#shorthands"><span class="octicon octicon-link"></span></a>Shorthands</h2>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;body</span> <span class="na">data-firebase=</span><span class="s">"https://firebase-jquery-plugin.firebaseio.com/"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;</span>
+        <span class="nt">&lt;strong</span> <span class="na">id=</span><span class="s">"user"</span> <span class="na">data-firebase=</span><span class="s">"user"</span><span class="nt">&gt;&lt;/strong&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">firebase</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'#user'</span><span class="p">).</span><span class="nx">firebase</span><span class="p">();</span> <span class="c1">// new Firebase("https://firebase-jquery-plugin.firebaseio.com/user");</span>
+<span class="nx">firebase</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'value'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">snapshot</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">'#user'</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">snapshot</span><span class="p">.</span><span class="nx">val</span><span class="p">());</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>If no value is provided for the <code>data-firebase</code> attribute, the ID will be used. The <code>#user</code> line above could be simplified to:</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;body</span> <span class="na">data-firebase=</span><span class="s">"https://firebase-jquery-plugin.firebaseio.com/"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;</span>
+        <span class="nt">&lt;strong</span> <span class="na">id=</span><span class="s">"user"</span> <span class="na">data-firebase</span><span class="nt">&gt;&lt;/strong&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+
+<h2>
+<a name="firebase-value" class="anchor" href="#firebase-value"><span class="octicon octicon-link"></span></a>firebase-value</h2>
+
+<p>Updating the DOM with a value from Firebase is so common that there's also a <code>data-firebase-value</code> attribute that will automatically do exactly that. The above could be further simplified to:</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;body</span> <span class="na">data-firebase=</span><span class="s">"https://firebase-jquery-plugin.firebaseio.com/"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;</span>
+        <span class="nt">&lt;strong</span> <span class="na">id=</span><span class="s">"user"</span> <span class="na">data-firebase-value</span><span class="nt">&gt;&lt;/strong&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+
+<p>Which would accomplish the same thing as the JavaScript above, without needing to manually write any JavaScript.</p>
+
+<h2>
+<a name="more-examples" class="anchor" href="#more-examples"><span class="octicon octicon-link"></span></a>More Examples</h2>
+
+<p>See the <code>example</code> directory for an example that sets a Firebase reference with form values.</p>
+
+<h2>
+<a name="about" class="anchor" href="#about"><span class="octicon octicon-link"></span></a>About</h2>
+
+<p>by Erik Beeson; MIT License. Feedback appreciated. Check out my other Firebase projects on github. Find me in #firebase on freenode or <a href="mailto:firebase-talk@googlegroups.com">firebase-talk@googlegroups.com</a></p>
       </section>
 
     </div>
