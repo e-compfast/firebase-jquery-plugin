@@ -1,0 +1,47 @@
+!!!
+html
+	head
+		title Firebase jQuery Plugin Example
+		link(rel="stylesheet", href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css")
+		link(rel="stylesheet", href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css")
+	body(data-firebase="https://chat.firebaseio.com")
+		.container(data-firebase="jquery-plugin-example")
+			.row
+				.span6: .well
+					#user(data-firebase)
+						p
+							strong Name: 
+							span(data-firebase-value="name")
+						p
+							strong Age: 
+							span(data-firebase-value="age")
+				.span6: .well
+					form.form-horizontal(data-firebase="user")
+						.control-group
+							label.control-label(for='name') Name
+							.controls
+								input#name(type='text', name='name')
+								span.help-block note: current values won't be loaded/updated
+						.control-group
+							label.control-label(for='age') Age
+							.controls: input#age(type='text', name='age')
+						.form-actions: input.btn.btn-primary(type='submit', value='Submit')
+
+		script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+		script(src="https://cdn.firebase.com/v0/firebase.js")
+
+		script(src="../jquery.firebase.js")
+
+		script(src="jquery.serializeJSON.min.js")
+
+		script(type="text/javascript").
+			$('form').each(function() {
+				var $form = $(this);
+				var firebase = $form.firebase();
+				if(firebase) {
+					$form.on('submit', function(e) {
+						e.preventDefault();
+						firebase.set($form.serializeJSON());
+					});
+				}
+			});

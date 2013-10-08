@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Firebase jQuery Plugin Example</title>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css">
+  </head>
+  <body data-firebase="https://chat.firebaseio.com">
+    <div data-firebase="jquery-plugin-example" class="container">
+      <div class="row">
+        <div class="span6">
+          <div class="well">
+            <div id="user" data-firebase>
+              <p><strong>Name: </strong><span data-firebase-value="name"></span></p>
+              <p><strong>Age: </strong><span data-firebase-value="age"></span></p>
+            </div>
+          </div>
+        </div>
+        <div class="span6">
+          <div class="well">
+            <form data-firebase="user" class="form-horizontal">
+              <div class="control-group">
+                <label for="name" class="control-label">Name</label>
+                <div class="controls">
+                  <input id="name" type="text" name="name"><span class="help-block">note: current values won't be loaded/updated</span>
+                </div>
+              </div>
+              <div class="control-group">
+                <label for="age" class="control-label">Age</label>
+                <div class="controls">
+                  <input id="age" type="text" name="age">
+                </div>
+              </div>
+              <div class="form-actions">
+                <input type="submit" value="Submit" class="btn btn-primary">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="../jquery.firebase.js"></script>
+    <script src="jquery.serializeJSON.min.js"></script>
+    <script type="text/javascript">
+      $('form').each(function() {
+       var $form = $(this);
+       var firebase = $form.firebase();
+       if(firebase) {
+        $form.on('submit', function(e) {
+         e.preventDefault();
+         firebase.set($form.serializeJSON());
+        });
+       }
+      });
+    </script>
+  </body>
+</html>
